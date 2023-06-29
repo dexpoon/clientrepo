@@ -1,0 +1,136 @@
+<form [formGroup]="taskEditForm" (ngSubmit)="updateTask()">
+
+
+  <div class="container-fluid">
+    <div class="row">
+      <!--=========================== TASK ID, HIDDEN BUT NEEDED FOR THE FORM ==========================-->
+
+      <div class="hidden">
+        Identifiant
+        <input type="text" id="id" formControlName="id" [(ngModel)]="task.id" class="form-control">
+        <input type="text" id="credos" value="My Credentials here!">
+      </div>
+
+      <div class="col-sm-4">
+        <!-- TASK DESCRIPTION -->
+        <div class="form-group">
+          <a>Task / Information</a>
+          <input type="text" id="description" formControlName="description" [(ngModel)]="task.description"
+            class="form-control">
+        </div>
+      </div>
+
+      <!-- Category-->
+      <div class="col-sm-1">
+        <div class="form-group">
+          <div class="dropdown" dropdown>
+            <a dropdown-open>Category</a>
+            <ul class="dropdown-menu">
+              <li *ngFor="let category of categories">
+                <a href="javascript:void(0)" (click)="onSelectCategory(category.id)">{{category.name}}</a>
+              </li>
+
+            </ul>
+          </div>
+          <div>{{selectedCategory}}</div>
+        </div>
+      </div> <!-- End Status-->
+
+      <!-- Status-->
+      <div class="col-sm-1">
+        <div class="form-group">
+          <div class="dropdown" dropdown>
+            <a dropdown-open>Status</a>
+            <ul class="dropdown-menu">
+              <li *ngFor="let status of stati">
+                <a href="javascript:void(0)" (click)="onSelectStatus(status.id)">{{status.name}}</a>
+              </li>
+
+            </ul>
+          </div>
+          <div>{{selectedStatus}}</div>
+        </div>
+      </div> <!-- End Status-->
+
+      <div class="col-sm-1">
+        <!--== TASK PRIORITY ==-->
+        <div class="form-group">
+          <div class="dropdown" dropdown>
+            <a dropdown-open>Priority</a>
+            <ul class="dropdown-menu">
+              <li *ngFor="let priority of priorities">
+                <a href="javascript:void(0)" (click)="onSelectPriority(priority.id)">{{ priority.name}}</a>
+              </li>
+            </ul>
+          </div>
+          <div>{{selectedPriority}}</div>
+        </div>
+      </div>
+
+      <div class="col-sm-2">
+        <!--== TASK DUE DATE ==-->
+        <div class="form-group">
+          <a>Due Date</a>
+          <input type="date" class="form-control" formControlName="ddate" name="ddate" [(ngModel)]="task.ddate">
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <a>Quick  Access Menu</a>
+        <br><button type="submit" class="btn btn-secondary" value="submit">
+        Save</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelEdits()">
+        Cancel</button>
+        <a href="{{task.address}}" target="_blank">
+         <button type="button" class="btn btn-secondary" (click)="connect()">
+          Connect</button>
+        </a>
+       </div> 
+
+    </div>
+  </div>
+
+
+  <div class="col-start-1 col-end-7 ...">
+    <button id="toggler" type="button" class="btn btn-primary" data-toggle="button" (click)="toggle()">
+      View & Edit Notes
+    </button>
+    <button id="copyPasta" type="button" class="btn btn-secondary" data-toggle="button" disabled=true (click)="notesToClipboard()">
+      Clipboard
+    </button>
+    
+    <!-- == show document in iframe ==-->
+    <div *ngIf="hasDocument;else noDocument">
+      <div class="row" id="divFrame">
+        <iframe class="animInIFrame" id="aiFrame" style="height:800px;width:1200px;" srcdoc='inside aiFrame'>
+        </iframe>
+      </div>
+
+    </div>
+
+    <!-- == or notes in text area ==-->
+    <ng-template #noDocument>
+      <div class="form-group notestitle">
+        <textarea name="notes" id="notes" formControlName="notes" [(ngModel)]="task.notes" class="form-control notes"
+          cols="30" rows="30">         </textarea> 
+      </div>
+    </ng-template>
+    </div>
+  
+
+  <!-- SAVE CANCEL -->
+
+  <br>
+  <div class="row">
+    <div class="col-sm-4 fancy-button">
+      <button type="submit" class="btn btn-primary" value="submit">
+        Save</button>
+      <button type="button" class="btn btn-primary" (click)="cancelEdits()">
+        Cancel</button>
+      <button type="button" id="encode" class="btn btn-primary" (click)="encodeB64()">
+        encode</button>
+      <button type="button" id="decode" class="btn btn-primary" (click)="decodeB64()">
+        decode</button>
+    </div>
+  </div>
+</form>

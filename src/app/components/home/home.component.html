@@ -1,0 +1,120 @@
+<div class="jumbotron text-center" style="height:5%;width:100%;">
+  <div class="row">
+    <div class="col-md-4">
+      <h4>Tasks, Bills & Appointments</h4>
+      <h5>Create, Update, Reprioritize and Stay on Top of Your Tasks..</h5>
+    </div>
+    <div class="col-md-4">
+      <h2><b>Info Manager</b></h2>
+      <h3><span> {{ TODAY_DATE }} </span></h3>
+      <h4><span>{{ TIME_STAMP }}</span></h4>
+      <div>
+        <a *ngIf="!authService.loggedIn()" class="btn btn-primary" [routerLink]="['/register']">Register</a> <a
+          *ngIf="!authService.loggedIn()" class="btn btn-default" [routerLink]="['/login']">Login</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <h4>Data Classification & Stats</h4>
+      <h5>Find Info based on Keywords, Priorities, Statuses, Categories..</h5>
+    </div>
+  </div>
+  <br>
+  <iframe id="notice" style="height:150px;width:800px" src=""></iframe>
+
+ </div>
+
+<div class="container" align="center">
+
+  <label>
+    <input type="radio" [(ngModel)]="dice" value="dice" (change)="check(dice)" />
+    Dice
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="you" checked="true" value="you" (change)="check(you)" />
+    YouAI
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="phind" value="phind" (change)="check(phind)" />
+    PhindAI
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="perplex" value="perplex" (change)="check(perplex)" />
+    Perplexity
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="prayer" value="prayer" (change)="check(prayer)" />
+    Adhan
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="weather" value="weather" (change)="check(weather)" />
+    Weather
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="fidelity" value="fidelity" (change)="check(fidelity)" />
+    Fidelity
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="bofa" value="bofa" (change)="check(bofa)" />
+    Bofa
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="metrocity" value="metrocity" (change)="check(metrocity)" />
+    MetroCity
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="safa" value="safa" (change)="check(safa)" />
+    Safa
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="binance" value="binance" (change)="check(binance)" />
+    Binance
+  </label>
+
+
+  <label>
+    <input type="radio" [(ngModel)]="metropcs" value="metropcs" (change)="check(metropcs)" />
+    T-Mobile
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="oujda" value="oujda" (change)="check(oujda)" />
+    Oujda
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="quran" value="quran" (change)="check(quran)" />
+    Quran
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="aws" value="aws" (change)="check(aws)" />
+    AWS
+  </label>
+
+  <label>
+    <input type="radio" [(ngModel)]="husna" value="husna" (change)="check(husna)" />
+    Husna
+  </label>
+  
+  <label>
+    <input type="radio" [(ngModel)]="rcm"  value="rcm" (change)="check(rcm)" />
+    Prayer
+  </label>
+  
+</div>
+
+
+<div class="row" align="center" id="divFrame">
+  <iframe class="animInIFrame" id="aiFrame" style="height:800px;width:1200px;" src='./intro.html'>
+  </iframe>
+</div>

@@ -1,0 +1,78 @@
+<form [formGroup]="assetEditForm"  (ngSubmit)="updateAsset()">
+
+  <div class="container-fluid">
+    <div class="row">
+      <!--=========================== Asset id, HIDDEN BUT NEEDED FOR THE FORM ==========================-->
+      <div class="hidden">
+        Identifiant
+        <input type="text" id="id" formControlName="id" [(ngModel)]="asset.id" class="form-control">
+      </div>
+      <br>
+      <div class="col-sm-3">  <!-- Asset Symbol -->
+        <div class="form-group">
+               <a>Asset Symbol / Name</a>
+            <input type="text" id="symbol" formControlName="symbol" [(ngModel)]="asset.symbol" class="form-control">
+        </div>
+      </div>
+
+      <!-- Asset Count -->
+      <div class="col-sm-2">    
+         <!-- countOwned  -->
+         <a>Count Owned</a>
+         <div class="form-group">
+              <input type="text" id="count_owned" formControlName="count_owned" [(ngModel)]="asset.count_owned" class="form-control">
+          </div>
+        </div> 
+
+      <!-- Asset Staked -->
+      <div class="col-sm-2">    
+        <!--  staked --> 
+        <a>Staking</a>
+        <div class="form-group">
+           <input type="text" id="staked" formControlName="staked" [(ngModel)]="asset.staked" class="form-control">
+          </div>
+      </div>
+
+      <!-- Custodian -->
+      <div class="col-sm-2">    
+        <!-- wallet -->
+        <a>Wallet</a>
+        <div class="form-group">
+           <input type="text" id="wallet" formControlName="wallet" [(ngModel)]="asset.wallet" class="form-control">
+        </div>
+      </div>
+
+     
+      <div class="col-sm-2">
+        <a>Link to Site</a>
+        <div class="form-group">
+        <a href="{{asset.url}}" target="_blank">
+         <button type="button" class="btn btn-secondary" (click)="connect()">
+          Connect</button>
+        </a>
+        </div>
+       </div> 
+
+      </div> <!-- End class row -->
+
+      <div class="row"> 
+        <div class="col-start-1 col-end-7 ...">
+              <!-- Asset Notes -->
+          <div class="form-group notestitle">
+            <textarea name="notes" id="notes" formControlName="notes" [(ngModel)]="asset.notes" class="form-control notes" cols="130" rows="15"></textarea>
+          </div>
+        </div>
+      </div> <!-- End class row -->
+    <!-- SAVE CANCEL -->
+    <br>
+    <div class="row"> <!-- Another row for Save/Cancel Buttons -->
+            <div class="col-sm-3 fancy-button">
+                    <button type="submit" class="btn btn-primary" value="submit">Save</button>
+                    <button type="button" class="btn btn-primary" (click)="cancelEdits()">Cancel</button>
+            </div>
+    </div>
+
+    
+  </div> <!-- end <div class="container-fluid"> -->
+    
+  </form>

@@ -1,0 +1,86 @@
+User: {{ userFullname }}
+<br><br><br>
+<div class="centered">
+    <h4 [ngStyle]="{'color':'blue'}"> {{ pageTitle }} </h4>
+</div>
+<br><br>
+
+
+<form [formGroup]="userEditForm"  (ngSubmit)="update()">
+
+
+    <!-- ID HIDDEN BUT USED TO UPDATE -->
+    <div class="hidden">
+        <input type="text" id="_id" formControlName="_id" [(ngModel)]="user._id" class="form-control">
+    </div>
+    <!-- ============================ LEFT LEFT LEFT ===========================================-->
+   
+            <div class="form-group">
+                Nom
+                <input type="text" id="name" formControlName="name" [(ngModel)]="user.name" class="form-control">
+             </div>
+             <div class="form-group">
+                Addresse Email
+                <input type="text" id="email" formControlName="email" [(ngModel)]="user.email" class="form-control">
+             </div>
+             <div class="form-group">
+                    Identifiant 
+                    <input type="text" id="username" formControlName="username" [(ngModel)]="user.username" class="form-control">
+                </div>
+                <div class="form-group">
+                    Mot de Passe        
+                    <input type="password" id="password" formControlName="password" [(ngModel)]="user.password" class="form-control">
+                </div>
+    
+            <div class="form-group">
+                Date d'Activation
+                <input type="date" id="activationDate" formControlName="activationDate" [(ngModel)]="user.activationDate" class="form-control">
+            </div>
+            <div class="form-group">
+                Date de Désactivation
+                <input type="date" id="deactivationDate" formControlName="deactivationDate" [(ngModel)]="user.deactivationDate" class="form-control">
+            </div>
+     
+     
+            <div class="form-group">
+                Affiliation
+                <input type="text" id="business" formControlName="business" [(ngModel)]="user.business" class="form-control">
+            </div>
+    
+                    <div class="dropdown" dropdown>
+                        <a dropdown-open>Statut Utilisateur</a>
+                            <ul class="dropdown-menu">
+                                <li *ngFor="let activation of userActivations">
+                                    <a href="javascript:void(0)" (click)="onSelectActivation(activation.id)">{{activation.name}}</a>
+                                </li>
+                            </ul>
+                    </div>
+                    <div>{{selectedActivation}}</div>
+
+                    <br>
+     
+           
+                    <div class="dropdown" dropdown>
+                        <a dropdown-open>Autorisation</a>
+                            <ul class="dropdown-menu">
+                                <li *ngFor="let role of userRoles">
+                                    <a href="javascript:void(0)" (click)="onSelectRole(role.id)">{{role.name}}</a>
+                                </li>
+                            </ul>
+                    </div>
+                    <div>{{selectedRole}}</div>
+
+    <!--=========================== SAVE CANCEL ==========================================================-->       
+     
+    <br><br>
+    <div class="row"> <!-- Another row for Save/Cancel Buttons -->    
+            <div class="col-sm-3">
+                    <button type="submit" class="btn btn-primary" value="submit">
+                        Enregistrer</button>
+                    <button type="button" class="btn btn-primary" (click)="cancel()">
+                        Annuler</button>
+            </div>
+    </div>    
+
+
+</form>        

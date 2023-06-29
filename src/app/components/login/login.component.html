@@ -1,0 +1,34 @@
+<h2 class="page-header">Login</h2>
+
+
+<br>
+<br>
+<form [formGroup]="form" (ngSubmit)="login()">
+
+  <div *ngIf="form.errors && form.errors.invalidLogin" class="alert alert-danger">
+       {{ form.errors.msg }}
+  </div>
+  <div *ngIf="form.errors && !form.errors.invalidLogin" class="alert alert-success">
+      {{ form.errors.msg }}
+  </div>
+  
+   
+  <div class="form-group">
+    <label>Username</label>
+    <input type="text" formControlName="username" name="username" class="form-control">
+    <div *ngIf="username.touched && username.invalid" class="alert alert-danger">
+      <div *ngIf="username.errors.minlength"> Username should be {{ username.errors.minlength.requiredLength }} characters minimum</div>
+      <div *ngIf="username.errors.required">username is required</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" formControlName="password" name="password" class="form-control">
+    <div *ngIf="password.touched && password.invalid" class="alert alert-danger">
+      <div *ngIf="password.errors.required">password is required</div>
+      <div *ngIf="password.errors.minlength">Password should be {{ password.errors.minlength.requiredLength }} characters minimum</div>
+    </div>
+  </div>
+  <input type="submit" class="btn btn-primary" value="Submit">
+</form>

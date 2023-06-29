@@ -1,0 +1,49 @@
+<h2 class="page-header">Register</h2>
+<form [formGroup]="form" (ngSubmit)="register()">
+
+  <div *ngIf="form.errors && form.errors.validRegistration" class="alert alert-success">
+      {{ form.errors.msg }}
+  </div>
+
+  <div *ngIf="form.errors && form.errors.invalidRegistration" class="alert alert-danger">
+      {{ form.errors.msg }}
+  </div>
+
+  <div class="form-group">
+    <label>Name</label>
+    <input type="text" formControlName="name" name="name" class="form-control">
+    <div *ngIf="name.touched && name.invalid" class="alert alert-danger">
+      <div *ngIf="name.errors.required">Name is required</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Email</label>
+    <input type="text" formControlName="email" name="email" class="form-control" >
+    <div *ngIf="email.touched && email.invalid" class="alert alert-danger">
+      <div *ngIf="email.errors.required">Email is required</div>
+      <div *ngIf="email.errors.email">Invalid Email format</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Username</label>
+    <input type="text" formControlName="username" name="username" class="form-control">
+    <div *ngIf="username.touched && username.invalid" class="alert alert-danger">
+      <div *ngIf="username.errors.required">Username is required</div>
+      <div *ngIf="username.errors.minlength">Username should have {{ username.errors.minlength.requiredLength }} char minimum</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" formControlName="password" name="password" class="form-control">
+    <div *ngIf="password.touched && password.invalid" class="alert alert-danger">
+      <div *ngIf="password.errors.required">password is required</div>
+      <div *ngIf="password.errors.minlength">Username should have {{ username.errors.minlength.requiredLength }} char minimum</div>
+    </div>
+  </div>
+  <input type="submit" class="btn btn-primary" value="Submit">
+  <input type="submit" class="btn btn-primary" value="Cancel" (click)="cancel()">
+
+</form>

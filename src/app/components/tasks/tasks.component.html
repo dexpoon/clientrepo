@@ -1,0 +1,152 @@
+<div class="row">
+    <div class="col col-span-1 left fancy">
+        Show Alerts:
+      <input type="checkbox" name="checkbox" value="checkbox" (change)="alerting($event)">
+    </div>
+    <div class="col col-span-4 right fancy">
+        <input class="inputInvisible" type="text" (click)="narrowDown('')" *ngIf="showActives"
+            [ngStyle]="{'color':'blue'}" value="Stats Ticker By Statuses:" />
+        <input style="font-weight: bold;" class="inputInvisible" type="text" (click)="narrowDown('Critical')"
+            *ngIf="showActives" [ngStyle]="{'color':'DarkRed'}" value="Critical: {{criticalCount()}}" />
+        <input style="font-weight: bold;" class="inputInvisible" type="text" (click)="narrowDown('High')"
+            *ngIf="showActives" [ngStyle]="{'color':'Crimson'}" value="High: {{highCount()}}" />
+        <input style="font-weight: bold;" class="inputInvisible" type="text" (click)="narrowDown('Completed')"
+            *ngIf="showActives" [ngStyle]="{'color':'green'}" value="Completed: {{completedCount()}}" />
+        <br>
+        <input class="inputInvisible" type="text" (click)="narrowDown('')" *ngIf="tasks" [ngStyle]="{'color':'blue'}"
+            value="Stats Ticker By Category:" />
+        <input style="font-weight: bold;" class="inputInvisible" type="text" (click)="narrowDown('Task')"
+            *ngIf="showActives" [ngStyle]="{'color':'LightBlue'}" value="Tasks: {{TaskCount()}}" />
+        <input style="font-weight: bold;" class="inputInvisible" type="text" (click)="narrowDown('Bill')"
+            *ngIf="showActives" [ngStyle]="{'color':'DodgerBlue'}" value="Bills: {{BillCount()}}" />
+        <input style="font-weight: bold;" class="inputInvisible" type="text" (click)="narrowDown('Info')"
+            *ngIf="showPassives" [ngStyle]="{'color':'LightSkyBlue'}" value="Infos: {{InfoCount()}}" />
+        <input style="font-weight: bold;" class="inputInvisible" type="text" (click)="narrowDown('Aptm')"
+            *ngIf="showActives" [ngStyle]="{'color':'Chartreuse'}" value="Aptms: {{AptmCount()}}" />
+        <input style="font-weight: bold;" class="inputInvisible" type="text" (click)="narrowDown('HowTo')"
+            *ngIf="showPassives" [ngStyle]="{'color':'SpringGreen'}" value="Howtos: {{HowtoCount()}}" />
+        <input style="font-weight: bold;" class="inputInvisible" type="text" (click)="narrowDown('Asset')"
+            *ngIf="showPassives" [ngStyle]="{'color':'SpringGreen'}" value="Assets: {{AssetCount()}}" />
+
+    </div>
+</div>
+
+<!--=========================== ADD TASK BUTTON =======================================================-->
+<form class="row">
+
+    <div class="col-sm-1">
+        <br>
+        <input [disabled]="disableCreate" type="submit" class="btn btn-primary" value="Add"
+            (click)="createTask(null, taskDscr)">
+    </div>
+
+    <!--=========================== TASK DESCRIPTION =======================================================-->
+    <div class="col-sm-5">
+        Show Completed: <input type="checkbox" [checked]="checkbox" (change)="showCompleted($event)">
+        <input type="text" #taskDscr (keyup.enter)="createTask($event, taskDscr)" (click)="clearTask(taskDscr)"
+            class="form-control" value={{taskHint}} (keyup)="onKeyUp(taskDscr)">
+    </div>
+    <!--=========================== TASK CATEGORY ==========================================================-->
+    <div class="col-sm-1">
+        <div class="container">
+            <div class="dropdown" dropdown>
+                <a dropdown-open>Category</a>
+                <ul class="dropdown-menu">
+                    <li *ngFor="let category of categories">
+                        <a href="javascript:void(0)" (click)="onSelectCategory(category.id)">{{category.name}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div>{{selectedCategory.name}}</div>
+        </div>
+    </div>
+
+    <!--=========================== TASK PRIORITY ==========================================================-->
+    <div *ngIf="showActives" class="col-sm-1">
+        <div class="container">
+            <div class="dropdown" dropdown>
+                <a dropdown-open>Priority</a>
+                <ul class="dropdown-menu">
+                    <li *ngFor="let priority of priorities">
+                        <a href="javascript:void(0)" (click)="onSelectPriority(priority.id)">{{ priority.name}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div>{{ selectedPriority.name }}</div>
+        </div>
+    </div>
+
+    <!--=========================== TASK DUE DATE ==========================================================-->
+    <div class="col-sm-2">
+        Due Date:
+        <input type="date" class="form-control" name="ddate" [(ngModel)]="newddate">
+    </div>
+
+    <!--=========================== TASK INTERACTIVE SEARCH ==========================================================-->
+    <div class="col-sm-2">
+        Description Only:
+        <input type="checkbox" name="checkbox" value="checkbox" (change)="changed($event)" checked>
+        <input type="text" id="search" class="form-control" (keyup)="onSearchKeyUp($event.target.value)"
+            placeholder="Search (responsive)">
+    </div>
+</form>
+
+<table class="table table-bordered table-striped table-hover table-fixed-header">
+    <thead class="header" [ngStyle]="{'background-color':'HoneyDew'}">
+        <tr>
+            <th class="text-center">
+                <a href="javascript:void(0)" (click)="sortTable('descSorter')">Task -- Information</a>
+            </th>
+            <th class="text-center">
+                <a href="javascript:void(0)" (click)="sortTable('statusSorter')">Status</a>
+            </th>
+            <th class="text-center">
+                <a href="javascript:void(0)" (click)="sortTable('prioritySorter')">priority</a>
+            </th>
+            <th class="text-center">
+                <a href="javascript:void(0)" (click)="sortTable('documentSorter')">document</a>
+            </th>
+            <th class="text-center">
+                <input (click)="sortTable('ddate')" style="font-weight: bold;" class="inputInvisible" type="text"
+                    *ngIf="showPassives" [ngStyle]="{'color':'#007aa5'}" value="Last Updated" />
+                <input (click)="sortTable('ddate')" style="font-weight: bold;" class="inputInvisible" type="text"
+                    *ngIf="showActives" [ngStyle]="{'color':'#007aa5'}" value="Due Date" />
+            </th>
+            <th class="text-center">
+                <a href="javascript:void(0)">Edit | Delete</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let task of tasks | sortTaskPipe:path:order">
+            <!-- <td> {{ task.id }} </td> "task.expanded = !task.expanded" -->
+            <td class="pointerCursor" (click)="editTask(task)" style="font-weight: bold"
+                [ngStyle]="{'backgroundColor': colorForCategory(task.category),  'color': black }"> 
+                <!--<a href="{{task.address}}"
+                    target="_blank"> </a> -->
+                    {{ task.description }} 
+                <div class="form-group notestitle" *ngIf="task.expanded"> test here </div>
+            </td>
+            <td style="font-weight: bold;"
+                [ngStyle]="{'color': colorForStatus(task.status), 'backgroundColor': colorForCategory(task.category) }">
+                {{ task.status }} </td>
+            <td style="font-weight: bold;"
+                [ngStyle]="{'color': colorForPriority(task.priority), 'backgroundColor': colorForCategory(task.category)  }">
+                {{ task.priority }} </td>
+            <td class="text-center" style="font-weight: bold;"
+                [ngStyle]="{'backgroundColor': colorForCategory(task.category) }">
+                {{task.docuName}}</td>
+            <td class="text-center" style="font-weight: bold;"
+                [ngStyle]="{'backgroundColor': colorForCategory(task.category) }">
+                {{task.ddate }}</td>
+            <td>
+                <button class="btn btn-info" (click)="editTask(task)">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" (click)="deleteTask(task)">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

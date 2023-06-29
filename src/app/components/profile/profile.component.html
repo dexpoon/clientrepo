@@ -1,0 +1,40 @@
+<div class="jumbotron centered" style="height:5%;width:100%;">
+<br>
+
+
+<!-- <div class="col col-span-3 centered"> -->
+<div class="row centered">
+
+
+<div class="centered" *ngIf="user">
+  <h3 class="page-header centered"  [ngStyle]="{'color':'blue'}"> {{ pageTitle }} </h3>
+  <br><br>
+  <ul class="list-group">
+    <li class="list-group-item"><label>Name:</label>                {{user.name}}</li>
+    <li class="list-group-item"><label>User Name:</label>  {{user.username}}</li>
+    <li class="list-group-item"><label>Autorizations:</label>      {{user.role}}</li>
+    <li class="list-group-item"><label>Affiliation:</label>        {{user.business}}</li>
+    <li class="list-group-item"><label>Email:</label>              {{user.email}}</li>
+
+    <!-- no need to show password here, even though it is encrypted
+    <li class="list-group-item"><label>Password:</label>           {{user.password}}</li><br>
+    -->
+    <div>
+        <a *ngIf="authService.loggedIn()" class="btn btn-primary" [routerLink]="['/changepassword', { 'paramKey' : user.username}]">Change Password</a>
+    </div>
+  </ul>
+</div>
+
+
+</div>
+<div class="col col-span-3">
+</div>
+<div class="col col-span-3">
+</div>
+<div class="col col-span-3">
+</div>
+<div class="col col-span-3">
+</div>
+
+<!-- </div> -->
+</div>

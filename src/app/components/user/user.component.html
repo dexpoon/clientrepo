@@ -1,0 +1,76 @@
+<div class="row">
+
+        <!--===== LEFT LEFT LEFT ====== -->
+        <div class="col col-span-3">
+                User: {{ userFullname }}
+        </div>
+        <!--===== MIDDLE MIDDLE MIDDLE ====== -->
+        <div class="col col-span-5">
+                <h3 [ngStyle]="{'color':'blue'}"> {{ pageTitle }} </h3>
+                <h5 [ngStyle]="{'color':'red'}"> {{ todos }} </h5>
+        </div>
+        <!--===== RIGHT RIGHT RIGHT ====== -->
+        <div class="col col-span-3 right fancy">
+                <h5><u>Users Summary</u></h5>
+                <h5 *ngIf="users" [ngStyle]="{'color':'red'}">Deactiavted Users:     {{ deactivatedUserCount() }}</h5>
+                <h5 *ngIf="users" [ngStyle]="{'color':'green'}">Deficiencies Users: {{ deficientUserCount() }}</h5>
+                <h5 *ngIf="users" [ngStyle]="{'color':'velvet'}">Online Users:    {{liveUserCount()}}</h5>
+                <h5 *ngIf="users" [ngStyle]="{'color':'black'}">Total Users:      {{ totalUserCount()}}</h5>
+        </div>
+</div>
+
+<!--
+User: {{ userFullname }}
+<div  class="centered">
+    <h3 class="page-header" [ngStyle]="{'color':'blue'}"> {{ pageTitle }} </h3>
+    <h5 [ngStyle]="{'color':'red'}"> {{ todos }} </h5>
+</div>
+-->
+
+<!-- This page is READ ONLY, NO CHANGES ARE MADE ON THIS SCREEN
+     THE ADMIN CAN SELECT SINGLE USERS TO EDIT AND SAVE THEM SEPARATELY
+-->
+
+<table class="table table-bordered table-striped table-hover table-fixed-header">
+        <thead class="header">
+            <tr>
+                <th class="text-center col-sm-2" id='name'>
+                        <a href="javascript:void(0)" (click)="sort('name')">Name</a>
+                </th>
+               <th class="text-center col-sm-1" id='username'>
+                        <a href="javascript:void(0)" (click)="sort('username')">User</a>
+                </th>
+                <!-- to have more space
+                <th class="text-center col-sm-2" id='email'>
+                        <a href="javascript:void(0)" (click)="sort('email')">Email</a>
+                </th>
+                -->
+                <th class="text-center col-sm-2" id='role'>
+                        <a href="javascript:void(0)" (click)="sort('role')">Authorizations</a>
+                </th>
+                <th class="text-center col-sm-2" id='business'>
+                        <a href="javascript:void(0)" (click)="sort('business')">Affiliation</a>
+                </th>
+                <th class="text-center col-sm-2" id='activationDate'>
+                        <a href="javascript:void(0)" (click)="sort('activationDate')">Activation Date</a>
+                </th>
+                <th class="text-center col-sm-2" id='status'>
+                        <a href="javascript:void(0)" (click)="sort('status')">Status</a>
+                </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users | sortUserPipe:path:order">
+                <td> <a href="javascript:void(0)" (click)="showUser(user)">{{ user.name }}   </a>     </td>
+                <td> {{ user.username           }}    </td>
+                <td> {{ user.role               }}    </td>
+                <td> {{ user.business           }}    </td>
+                <td> {{ user.activationDate     }}    </td>
+                <td> {{ user.status              }}    </td>
+             </tr>
+        </tbody>
+    </table>
+
+
