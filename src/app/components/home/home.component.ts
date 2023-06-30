@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
   SAFA_URL        = "https://assafanet.bankassafa.com/client/login/auth/";
   BINANCE_URL     = "https://www.binance.us/login?return_to=aHR0cHM6Ly9iaW5hbmNlLnVzLw==";
   METROPCS_URL    = "https://www.metrobyt-mobile.com/my-account/sign-in";
-  YAHOO_URL       = "https://finance.yahoo.com";
+  YAHOO_URL       = "https://finance.yahoo.com/portfolio/p_1/view/v1";
   GMAIL_URL       = "https://mail.google.com/mail/u/0/#inbox";
   DICE_URL        = "https://www.dice.com/";
   QURAN_URL       = "https://www.alim.org/quran/mushaf/page/257/";
@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
   MARKET_CALENDAR = "https://www.marketwatch.com/economy-politics/calendar";
   OUJDA_URL       = "https://www.timeanddate.com/worldclock/morocco/oujda";
   RCM_URL         = "https://roswellmasjid.org/";
+
 
 
   // IMPORTANT, TO BE ABLE TO LOAD THESE.. FILES NEED TO BE WITHIN THE BASE CODE
