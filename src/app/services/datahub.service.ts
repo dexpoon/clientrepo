@@ -136,7 +136,7 @@ update(task) {
 
     let headers = new Headers()
     headers.set('Content-Type', CONTENT_TYPES.TEXT_PLAIN);
-    var PARAM_URL = task.id + '-' + task.description + '-' + task.notes + '-' + task.status + '-' + task.priority + '-' + task.ddate + '-' + task.category + '-' + task.username;
+    var PARAM_URL = task.id + '-' + task.description + '-' + task.notes + '-' + task.status + '-' + task.priority + '-' + task.ddate + '-' + task.category + '-' + task.docuName + '-' + task.username;
 
     return this.http.get(this.BASE_URL_TASK + '/update/' + PARAM_URL , {headers: headers})
      .map(res => res.json());
