@@ -91,7 +91,8 @@
   </div>
 
 
-  <div class="col-start-1 col-end-7 ...">
+  <div class="col-start-1 col-end-7 ..."> 
+    <input type="file" (change)="fileUpload($event)" placeholder="Upload file" accept=".pdf,.doc,.docx,.jpg,.png">
     <button id="toggler" type="button" class="btn btn-primary" data-toggle="button" (click)="toggle()">
       View & Edit Notes
     </button>

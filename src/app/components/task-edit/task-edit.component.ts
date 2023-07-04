@@ -1,21 +1,18 @@
 import { InfoCategories, TaskCategories } from './../common/containers';
 import { AuthenticationService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ITask } from '../tasks/itask';
-import { clone, transform } from 'lodash';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
-import { Status, Priority, TaskStati, TaskPriorities } from '../common/containers'
-import { timeout } from 'q';
+import { TaskStati, TaskPriorities } from '../common/containers'
 import { CHILL_TIME_OUT, CHILL } from '../common/config';
 import { Logger } from 'angular2-logger/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 // SEARCH ========================================
 import { SearchService } from '../../services/search.service';
 import { Subject } from 'rxjs/Subject';
+import { Http, RequestOptions } from '@angular/http';
 
 @Component({
   selector: 'app-post-edit',
@@ -56,9 +53,8 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
     private authService: AuthenticationService,
     private activatedRoute: ActivatedRoute,
     private taskService: TaskService,
-    private logger: Logger,
-    private location: Location,
-    private sanitizer: DomSanitizer) {
+    private logger: Logger, 
+    private http: Http) {
 
   }
 
@@ -207,9 +203,13 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
     editedTask.description = editedTask.description.replace(/\n/g, '<br>');
     editedTask.description = editedTask.description.replace(/\//g, "<>");
 
-    //editedTask.description = btoa(editedTask.description);
+    // Adding document attachement if present
+    this.attachment = this.attachment.replace(/-/g, "~")
+    this.attachment = this.attachment.replace(/\//g, "<>")
+    editedTask.docuName = this.attachment
 
-    this.logger.info('UPDATE TASK AFTER ' + editedTask.notes);
+    //editedTask.description = btoa(editedTask.description);
+    this.logger.info('UPDATE TASK AFTER ' + editedTask.notes)
 
     this.taskService.update(editedTask).
       subscribe(data => {
@@ -235,6 +235,33 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
       this.router.navigate(['/tasklist', { 'taskIdKey': editedTask.id }]);
 
   } // updateTask
+
+  attachment=''
+  fileUpload(event) {
+    let fileList: FileList = event.target.files;
+    if (fileList.length < 1) {
+      return;
+    }
+    let file: File = fileList[0];
+    this.attachment = file.name
+    console.log("Attaching File: ", this.attachment)
+
+    /* For later maybe
+    let formData:FormData = new FormData();
+    formData.append('uploadFile', file, file.name)
+    let headers = new Headers();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.append('Accept', 'application/json');
+    let options = new RequestOptions({ headers: headers });
+    this.http.post(`${this.apiEndPoint}`, formData, options)
+        .map(res => res.json())
+        .catch(error => Observable.throw(error))
+        .subscribe(
+            data => console.log('success'),
+            error => console.log(error)
+        );
+        */
+}   
 
 
   cancelEdits() {
