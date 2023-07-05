@@ -326,19 +326,17 @@ export class TasksComponent implements OnInit {
       
       let tempNotes = this.decodeBase64(objs[i].notes);
 
-      if(i == 45) {
-        console.log(" Before replace: ", objs[i].description)
-      }
       objs[i].description = objs[i].description.replace(/~/g, "-");
       objs[i].description = objs[i].description.replace(/<>/g, "/");
-  
-      if(i == 45) {
-        console.log(" After replace: ", objs[i].description)
-      }
   
       if (tempNotes !== undefined) {
         objs[i].notes = tempNotes.replace(/~/g, "-");
         objs[i].notes = tempNotes.replace(/<>/g, "/");
+      }
+
+      if(objs[i].docuName == 'XYZ') {
+        objs[i].docuName = ''
+        objs[i].hasDocument = false
       }
     }
     return objs;

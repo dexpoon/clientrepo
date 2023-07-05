@@ -42,7 +42,7 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
   taskEditForm = new FormGroup({
     id: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-    notes: new FormControl(''),
+    notes: new FormControl('', Validators.required),
     status: new FormControl('', Validators.required),
     priority: new FormControl('', Validators.required),
     ddate: new FormControl('', Validators.required),
@@ -103,10 +103,14 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
   
 
     // Adding document attachement if present
-    if(this.task.docuName == 'XYZ')
+    if(this.task.docuName == 'XYZ') {
         this.task.docuName = ''
-    this.task.docuName = this.task.docuName.replace(/~/g, "-")
-    this.task.docuName = this.task.docuName.replace(/<>/g, "/")
+        this.attachment = ''
+    }else{
+        this.task.docuName = this.task.docuName.replace(/~/g, "-")
+        this.task.docuName = this.task.docuName.replace(/<>/g, "/")
+        this.attachment = this.task.docuName
+    }
 
     //this.logger.info('NGINIT AFTER ' + this.task.notes);
     this.IFRAME = document.getElementById("aiFrame")
@@ -165,15 +169,18 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log("AfterViewInit ===", new Date().getMilliseconds()) 
+    //console.log("AfterViewInit ===", new Date().getMilliseconds()) 
   }
-  ngAfterContentInit(): void { console.log("AfterContentInit ===", new Date().getMilliseconds()) }
-  ngDoCheck(): void { console.log("DoCheck ===", new Date().getMilliseconds()) }
-  ngAfterContentChecked(): void { console.log("AfterContentChecked ===", new Date().getMilliseconds()) }
+  ngAfterContentInit(): void { // console.log("AfterContentInit ===", new Date().getMilliseconds()) 
+  }
+  ngDoCheck(): void { // console.log("DoCheck ===", new Date().getMilliseconds()) 
+  }
+  ngAfterContentChecked(): void { // console.log("AfterContentChecked ===", new Date().getMilliseconds()) 
+  }
 
   ngAfterViewChecked(): void
   { 
-      console.log("AfterViewChecked ===", new Date().getMilliseconds())
+      //console.log("AfterViewChecked ===", new Date().getMilliseconds())
       this.husle()
   }
   
@@ -181,7 +188,7 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
     console.log("Docu Name: ", this.task.docuName)
     if(this.hasDocument) {
         let docuFrame = document.getElementById("aiFrame")
-        console.log("docuFrame:", docuFrame)
+        //console.log("docuFrame:", docuFrame)
         console.log("hasDocument:", this.hasDocument)
         //this.hasDocument = true;      // line 2
         if(docuFrame == null || docuFrame == undefined)
@@ -205,6 +212,8 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
     // MongoDB will store \n as <br> html add on
     // to keep the formatting.
     // - needs to be converted to ~ because - is used in the parameter list
+    editedTask.notes  = this.task.notes
+
     editedTask.notes = editedTask.notes.replace(/-/g, "~");
     editedTask.notes = editedTask.notes.replace(/\n/g, '<br>');
     editedTask.notes = editedTask.notes.replace(/\//g, "<>");
@@ -257,8 +266,17 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
       return;
     }
     let file: File = fileList[0];
-    this.attachment = file.name
-    console.log("Attaching File: ", this.attachment)
+    
+    if(file.name != '1DETACH.PNG') {
+      this.attachment = file.name
+      this.hasDocument = true
+    }else {
+      this.attachment = 'XYZ'
+      this.hasDocument = false
+    } 
+    this.task.docuName = this.attachment
+
+    console.log(`Attached File: ${this.attachment} to task`)
 
     /* For later maybe
     let formData:FormData = new FormData();
@@ -370,7 +388,7 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
   };
 
   ngOnDestroy(): void { 
-    console.log("OnDestroy ===", new Date().getMilliseconds()) 
+   // console.log("OnDestroy ===", new Date().getMilliseconds()) 
     this.taskEditForm = null
     this.hasDocument  = false
     this.task         = null
