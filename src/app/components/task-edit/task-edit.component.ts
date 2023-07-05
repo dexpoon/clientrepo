@@ -101,6 +101,13 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
     this.task.description = this.task.description.replace(/~/g, "-");
     this.task.description = this.task.description.replace(/<>/g, "/");
   
+
+    // Adding document attachement if present
+    if(this.task.docuName == 'XYZ')
+        this.task.docuName = ''
+    this.task.docuName = this.task.docuName.replace(/~/g, "-")
+    this.task.docuName = this.task.docuName.replace(/<>/g, "/")
+
     //this.logger.info('NGINIT AFTER ' + this.task.notes);
     this.IFRAME = document.getElementById("aiFrame")
 
