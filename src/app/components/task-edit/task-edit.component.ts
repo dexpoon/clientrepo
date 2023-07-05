@@ -184,6 +184,10 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
     }
   }
 
+  isEmpty(data) {
+    return (data == '' || data == 'undefined' || data == undefined || data == ' ') ? true : false
+  }
+
   infoTab = ['Asset', 'Info', 'HowTo']
   updateTask() {
     const editedTask = this.taskEditForm.value;
@@ -204,6 +208,9 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
     editedTask.description = editedTask.description.replace(/\//g, "<>");
 
     // Adding document attachement if present
+    if(this.isEmpty(this.attachment)) 
+        this.attachment = 'XYZ'
+    
     this.attachment = this.attachment.replace(/-/g, "~")
     this.attachment = this.attachment.replace(/\//g, "<>")
     editedTask.docuName = this.attachment
