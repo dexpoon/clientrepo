@@ -6,14 +6,12 @@ import { ITask } from '../tasks/itask';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
 import { TaskStati, TaskPriorities } from '../common/containers'
-import { TaskStati, TaskPriorities } from '../common/containers'
 import { CHILL_TIME_OUT, CHILL } from '../common/config';
 import { Logger } from 'angular2-logger/core';
 
 // SEARCH ========================================
 import { SearchService } from '../../services/search.service';
 import { Subject } from 'rxjs/Subject';
-import { Http, RequestOptions } from '@angular/http';
 import { Http, RequestOptions } from '@angular/http';
 
 @Component({
@@ -55,8 +53,6 @@ export class TaskEditComponent implements OnInit, AfterViewInit {
     private authService: AuthenticationService,
     private activatedRoute: ActivatedRoute,
     private taskService: TaskService,
-    private logger: Logger, 
-    private http: Http) {
     private logger: Logger, 
     private http: Http) {
 
