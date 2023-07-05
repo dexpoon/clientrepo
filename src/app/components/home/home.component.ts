@@ -83,6 +83,7 @@ export class HomeComponent implements OnInit {
     this.TODAY_DATE = new Date().toLocaleDateString();
     this.TIME_STAMP = new Date().toLocaleTimeString();
 
+    /*
     let noticeFrame:any = document.getElementById("notice");
     let noticeFrameDoc = noticeFrame.contentWindow.document;
     
@@ -92,14 +93,15 @@ export class HomeComponent implements OnInit {
                 <br>Naming convention for versions
                 <br>Naming Convention for Docker images and containers
                 </h3></div</center>`
-    
+        
     noticeFrameDoc.body.innerHTML = msg
- 
+    */
     this.IFRAME = document.getElementById("aiFrame");
-    //this.IFRAME = document.getElementsByTagName("iframe")[0];
+    this.IFRAME = document.getElementsByTagName("iframe")[0];
     this.iDocument = this.IFRAME.contentWindow.document;
     this.chill(1000000);
     
+
     this.IFRAME.contentWindow.location.replace(this.HUSNA_URL);
   }
 
@@ -116,7 +118,7 @@ export class HomeComponent implements OnInit {
     if (event) {
       //this.IFRAME.contentWindow.parent.scrollTo(0,0); // scrolls all the way UP
       //this.IFRAME.contentWindow.parent.scrollTo(0, document.body.scrollHeight);  scrolls all the way DOWN
-      this.IFRAME.contentWindow.parent.scrollTo(0, 500);
+      this.IFRAME.contentWindow.parent.scrollTo(0, 330);
       this.IFRAME.contentWindow.location.replace(this.URL_BY_RADIO_MAP.get(event));
     }
   }

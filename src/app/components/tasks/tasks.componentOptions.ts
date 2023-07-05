@@ -244,6 +244,12 @@ export class TasksComponentOptions implements OnInit {
         objs[i].notes = tempNotes.replace(/~/g, "-");
         objs[i].notes = tempNotes.replace(/<>/g, "/");
       }
+
+      if(objs[i].docuName == 'XYZ') {
+        objs[i].docuName = ''
+        objs[i].hasDocument = false
+      }
+
     }
     return objs;
   }
