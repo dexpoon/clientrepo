@@ -12,7 +12,7 @@ import { TaskService } from '../../services/task.service';
 export class AboutComponent implements OnInit {
 
   appName = 'InfoMann' 
-  version = '07-03-23'
+  version = '07-05-23'
   about = `${this.appName}: v_${this.version}`
   info = `Create, Manage, Update, Store and Search Tasks,
           Appointments, Bills, Information, Howtos, 
