@@ -38,6 +38,7 @@ import { TasksComponentOptions } from './components/tasks/tasks.componentOptions
 import { DashEditComponent } from './components/dashboard-edit/dashEdit.component';
 import { AssetService } from './services/asset.service';
 import { StockComponent } from './components/dashboard/stock.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 let appRoutes: Routes = [
@@ -94,7 +95,8 @@ let appRoutes: Routes = [
     HttpModule,
     DropdownModule,
     RouterModule.forRoot(appRoutes),
-    SidebarModule
+    SidebarModule,
+    HttpClientModule  // added to handle POST Requests
   ],
   providers: [AuthenticationService,
               AuthorizationGuard,

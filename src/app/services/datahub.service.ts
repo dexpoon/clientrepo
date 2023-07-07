@@ -2,18 +2,14 @@ import { BadRequest } from '../components/error/bad-request';
 import { NotFoudError } from '../components/error/not-found-error';
 import { AppError } from '../components/error/app-error';
 import { Injectable } from '@angular/core';
-import { Http, URLSearchParams,  Response, Headers, HttpModule } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 import { AuthenticationService } from './auth.service';
 import { CONTENT_TYPES } from '../content.config';
-import { ITask } from '../components/tasks/itask';
-import { BehaviorSubject } from 'rxjs';
 import { Logger } from 'angular2-logger/core';
-
-
 
 import { CONFIGURABLE_URL} from '../config/appConfig';
 import { DEPLOY_MODE } from '../config/deployConfig';
@@ -32,23 +28,98 @@ if(DEPLOY_MODE.LOCAL == true) {
                     CONFIG_GATEWAY = CONFIGURABLE_URL.URL_GATEWAY_AWS;
 }
 
-
-
-
-
-
-@Injectable()
+@Injectable() 
 export class DatahubService {
   className="DatahubService";
   user: any
   username: string
+  BASE_URL_TASK   =  tempURL + '/tasks';
 
-BASE_URL_TASK   =  tempURL + '/tasks';
+constructor(private http: Http, 
+            private authService: AuthenticationService, 
+            private logger: Logger) {}
 
-constructor(private BASE_URL_NOT_USED: string, private http: Http,
-            private authService: AuthenticationService, private logger: Logger) {
+create(task) {
+                this.user = this.authService.loadUser();
+                this.username = this.user.username;
+                task.username = this.username;
+                
+                let headers = new Headers()
+                //headers.append('Content-Type', 'application/x-www-form-urlencoded');
+                headers.append('Content-Type', CONTENT_TYPES.APP_JSON);
 
-} // constructor
+                // - is reserved as the get params separator
+                let tempDate = task.ddate.replace(/-/g, "A");
+                task.ddate   = tempDate;
+                let body = {
+                  'description': task.description,
+                  'status': task.status,
+                  'priority': task.priority,
+                  'ddate': task.ddate,
+                  'category': task.category,
+                  'username': task.username,
+                  'notes': task.notes
+                }
+
+                return this.http.post(this.BASE_URL_TASK + '/create/', body, {headers: headers})
+                      .map(res => res.json());
+                      /*
+                      .catch(error => Observable.throw(error))
+                      .subscribe(
+                          data => console.log('success'),
+                          error => console.log(error)
+                      );*/
+} // Adding notes 'Place Holder'
+
+update(task) {
+  if(this.username === 'undefined') {
+    this.user = this.authService.loadUser();
+    this.username = this.user.username;
+  }
+  task.username = this.username;
+    // - is reserved as the get params separator not needed for POST
+    // let tempDate = task.ddate.replace(/-/g, "A");
+    // task.ddate   = tempDate;
+
+  let headers = new Headers()
+  headers.set('Content-Type', CONTENT_TYPES.APP_JSON);
+  let body = {
+    'id': task.id,
+    'description': task.description,
+    'status': task.status,
+    'priority': task.priority,
+    'ddate': task.ddate,
+    'category': task.category,
+    'username': task.username,
+    'notes': task.notes,
+    'docuName' : task.docuName
+  }
+  return this.http.put(this.BASE_URL_TASK + '/update/', body, {headers: headers})
+        .map(res => res.json());
+}
+
+updateAsset(asset) {
+  if(this.username == undefined) {
+    this.user = this.authService.loadUser();
+    this.username = this.user.username;
+  }
+  asset.username = this.username;
+
+  let headers = new Headers()
+  headers.set('Content-Type', CONTENT_TYPES.APP_JSON)
+  
+  let body = {
+    'id'          : asset.id,
+    'symbol'      : asset.symbol,
+    'notes'       : this.optionParam(asset.notes),
+    'wallet'      : this.optionParam(asset.wallet),
+    'count_owned' : this.optionParam(asset.count_owned),
+    'staked'      : this.optionParam(asset.staked),
+    'username'    :  asset.username
+  }
+  return this.http.put(this.BASE_URL_ASSSET + '/update/', body, {headers: headers})
+   .map(res => res.json());
+}
 
 
 loadVersionInfo(pattern) {
@@ -93,7 +164,52 @@ loadWithOption(option) {
 
 }
 
-create(task) {
+exists(param) {
+  if(param === undefined || param === 'undefined' || param === '' || param === "" || param === null)
+    return false;
+  return true;
+}
+
+handleError(error) {
+  if(error.status === 404)
+      return Observable.throw(new NotFoudError(error));
+  else
+  if(error.status === 400)
+      return Observable.throw(new BadRequest(error));
+  else
+      return Observable.throw(new AppError(error));
+}
+
+clear() {
+  this.user     = {};
+  this.username = "";
+}
+
+optionParam(param):string {
+  if(param == '' || param == null || param == undefined || param == 'undefined' || param == 0)
+    return 'XXXXX';
+  else
+    return param;
+}
+
+
+//*************** ASSETS HANDLING ***************************/
+BASE_URL_ASSSET   =  tempURL + '/assets';
+
+loadStaticAssetsData() {
+  this.clear();
+  this.user = this.authService.loadUser();
+  this.username = this.user.username;
+  let headers = new Headers();
+  headers.set('Content-Type', CONTENT_TYPES.TEXT_PLAIN);
+  // headers.set('username', this.username)  CORS
+  return this.http.get(this.BASE_URL_ASSSET + '/assetlist/' + this.username, {headers: headers})
+  .map(res => res.json());
+}
+
+
+/*===================================== NOT USED SWITCHING TO POST ===================================*/
+createGET(task) {
   this.user = this.authService.loadUser();
   this.username = this.user.username;
   task.username = this.username;
@@ -114,75 +230,8 @@ create(task) {
               });
 } // Adding notes 'Place Holder'
 
-
-
-exists(param) {
-  if(param === undefined || param === 'undefined' || param === '' || param === "" || param === null)
-    return false;
-  return true;
-}
-
-update(task) {
-    if(this.username === 'undefined') {
-      this.user = this.authService.loadUser();
-      this.username = this.user.username;
-    }
-    task.username = this.username;
-    //task.ddate = new Date();
-
-       // - is reserved as the get params separator
-       let tempDate = task.ddate.replace(/-/g, "A");
-       task.ddate   = tempDate;
-
-    let headers = new Headers()
-    headers.set('Content-Type', CONTENT_TYPES.TEXT_PLAIN);
-    var PARAM_URL = task.id + '-' + task.description + '-' + task.notes + '-' + task.status + '-' + task.priority + '-' + task.ddate + '-' + task.category + '-' + task.docuName + '-' + task.username;
-
-    return this.http.get(this.BASE_URL_TASK + '/update/' + PARAM_URL , {headers: headers})
-     .map(res => res.json());
-    //catch(this.handleError); // just passing a ref to the handleError function
-}
-
-
-delete(resource) {
-    // For testing only
-    // return Observable.throw(new AppError());
-       return this.http.delete(this.BASE_URL_TASK + '/' + resource.id).
-       catch(this.handleError);
-} // delete()
-
-handleError(error) {
-  if(error.status === 404)
-      return Observable.throw(new NotFoudError(error));
-  else
-  if(error.status === 400)
-      return Observable.throw(new BadRequest(error));
-  else
-      return Observable.throw(new AppError(error));
-}
-
-clear() {
-  this.user     = {};
-  this.username = "";
-}
-
-
-//*************** ASSETS HANDLING ***************************/
-BASE_URL_ASSSET   =  tempURL + '/assets';
-
-loadStaticAssetsData() {
-  this.clear();
-  this.user = this.authService.loadUser();
-  this.username = this.user.username;
-  let headers = new Headers();
-  headers.set('Content-Type', CONTENT_TYPES.TEXT_PLAIN);
-  // headers.set('username', this.username)  CORS
-  return this.http.get(this.BASE_URL_ASSSET + '/assetlist/' + this.username, {headers: headers})
-  .map(res => res.json());
-}
-
-
-updateAsset(asset) {
+/*===================================== NOT USED SWITCHING TO PUT ===================================*/
+updateAssetGET(asset) {
   if(this.username == undefined) {
     this.user = this.authService.loadUser();
     this.username = this.user.username;
@@ -202,34 +251,32 @@ updateAsset(asset) {
 
 }
 
-updateAssetPost(asset) {
-  if(this.username == undefined) {
+/*===================================== NOT USED SWITCHING TO PUT ===================================*/
+updateGET(task) {
+  if(this.username === 'undefined') {
     this.user = this.authService.loadUser();
     this.username = this.user.username;
   }
-  asset.username = this.username;
+  task.username = this.username;
+  //task.ddate = new Date();
 
-  let urlParams = new URLSearchParams()
-  urlParams.append('Content-Type', CONTENT_TYPES.TEXT_PLAIN)
-  urlParams.append('id', asset.id)
-  urlParams.append('symbol', asset.symbol)
-  urlParams.append('notes', this.optionParam(asset.notes))
-  urlParams.append('wallet', this.optionParam(asset.wallet))
-  urlParams.append('count_owned', this.optionParam(asset.count_owned))
-  urlParams.append('staked', this.optionParam(asset.staked))
-  urlParams.append('username', asset.username)
-  
-  this.http.post(this.BASE_URL_ASSSET + '/update/', urlParams)
+     // - is reserved as the get params separator
+     let tempDate = task.ddate.replace(/-/g, "A");
+     task.ddate   = tempDate;
+
+  let headers = new Headers()
+  headers.set('Content-Type', CONTENT_TYPES.TEXT_PLAIN);
+  var PARAM_URL = task.id + '-' + task.description + '-' + task.notes + '-' + task.status + '-' + task.priority + '-' + task.ddate + '-' + task.category + '-' + task.docuName + '-' + task.username;
+
+  return this.http.get(this.BASE_URL_TASK + '/update/' + PARAM_URL , {headers: headers})
    .map(res => res.json());
-
+  //catch(this.handleError); // just passing a ref to the handleError function
 }
-
-optionParam(param):string {
-  if(param == '' || param == null || param == undefined || param == 'undefined' || param == 0)
-    return 'XXXXX';
-  else
-    return param;
-}
-
+delete(resource) {
+  // For testing only
+  // return Observable.throw(new AppError());
+     return this.http.delete(this.BASE_URL_TASK + '/' + resource.id).
+     catch(this.handleError);
+} // delete()
 
 } // End Class DatahubService

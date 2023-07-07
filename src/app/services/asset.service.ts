@@ -9,7 +9,7 @@ import { AuthenticationService } from './auth.service';
 export class AssetService extends DatahubService {
 
     constructor(http: Http, authService: AuthenticationService) {
-        super(null, http, authService, null);
+        super(http, authService, null);
     }
 
 } // class AssetService
