@@ -4,11 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IAsset } from '../dashboard/asset';
-import { clone } from 'lodash';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { TaskService } from '../../services/task.service';
-import { Status, Priority, TaskStati, TaskPriorities } from '../common/containers'
-import { timeout } from 'q';
 import { CHILL_TIME_OUT, CHILL } from '../common/config';
 import { Logger } from 'angular2-logger/core';
 import { AssetService } from '../../services/asset.service';

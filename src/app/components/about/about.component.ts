@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ITask } from '../tasks/itask';
 import { TaskService } from '../../services/task.service';
-
 
 @Component({
   selector: 'app-about',
@@ -41,9 +39,28 @@ export class AboutComponent implements OnInit {
 
 format(data) {
        //data= data.replace(/<br>/g, '\n'); this screws up the break lines..
-       data= data.replace(/~/g, "-");
-       data= data.replace(/<>/g, "/");
+       data = this.decodeBase64(data) 
+       data= data.replace(/~/g, "-")
+       data= data.replace(/<>/g, "/")
        return data
 }
+
+/**
+  * Decode a string of base64 as text
+  * @param data The string of base64 encoded text
+  * @returns The decoded text.
+  */
+decodeBase64(data: string) {
+  //return decodeURIComponent(atob(data));
+  try {
+    return decodeURIComponent(data)
+  } catch (e) {
+    console.log(e.message, ' returning data as is..')
+    return data
+  }
+
+  //return data;
+}
+
 
 } // End AboutComponent
